@@ -4,6 +4,18 @@ ClassIsland 插件：通过 [NapCat](https://napneko.github.io/) 或 [SnowLuma](
 
 支持任意兼容 OneBot 11 的机器人框架（NapCat 与 SnowLuma 均已核对通过）。
 
+## 兼容性
+
+- **ClassIsland：2.0.4 及以上**（2.0.x 与 2.1.x 均已实测通过）。
+  插件用 `ClassIsland.PluginSdk 2.0.4` 编译，运行时要求 `ClassIsland.Core >= 2.0.4`。
+
+  > 注意：ClassIsland 2.0.4 与 2.1.x 提供的依赖程序集版本不同
+  > （Avalonia 11.3.13 vs 11.3.17、DI/Logging 抽象 8.0.0.0 vs 10.0.0.0）。
+  > 由于 .NET 程序集绑定要求「运行时版本 ≥ 引用版本」，两者无法用同一个构建同时覆盖，
+  > 本插件按 2.0.4 的版本编译以取得更大的兼容范围。
+- **机器人框架**：NapCat、SnowLuma 或任意兼容 OneBot 11 的实现。
+- **操作系统**：Windows（插件使用 `HttpListener` 与 ClassIsland 的 Windows 目标框架）。
+
 ## 功能
 
 - **双连接模式**：HTTP POST 上报 / 反向 WebSocket，设置界面一键切换，改完自动重载监听（无需重启 ClassIsland）。

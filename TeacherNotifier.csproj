@@ -6,18 +6,22 @@
     <Nullable>enable</Nullable>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <PlatformTarget>x64</PlatformTarget>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
-    <Version>1.1.0.0</Version>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
+    <Version>1.2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClassIsland.PluginSdk" Version="2.1.0.1">
+    <!-- 用 2.0.4 而非最新 SDK 编译：让插件里的 ClassIsland.Core 引用降到 2.0.4.0，
+         从而同时兼容 ClassIsland 2.0.x 与 2.1.x（程序集引用只要求 >= 编译时的版本） -->
+    <PackageReference Include="ClassIsland.PluginSdk" Version="2.0.4">
       <ExcludeAssets>runtime; native</ExcludeAssets>
     </PackageReference>
     <!-- ClassIsland.Core 对 Avalonia 排除了 build 资产，显式引用以确保 .axaml 能被编译；
-         运行时 dll 由 ClassIsland 提供，故排除 runtime 避免类型重复 -->
-    <PackageReference Include="Avalonia" Version="11.3.17">
+         运行时 dll 由 ClassIsland 提供，故排除 runtime 避免类型重复。
+         版本锁在 11.3.13：ClassIsland 2.0.4 提供的是 Avalonia 11.3.13.0，
+         而程序集引用要求「运行时 >= 引用版本」，用更高版本会导致 2.0.4 加载失败。 -->
+    <PackageReference Include="Avalonia" Version="11.3.13">
       <ExcludeAssets>runtime; native</ExcludeAssets>
     </PackageReference>
   </ItemGroup>
