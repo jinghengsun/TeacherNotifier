@@ -135,6 +135,35 @@ SnowLuma 在 Windows 上原生运行、自动注入桌面版 QQ，不需要 Dock
 - `dotnet build -c Release` 编译。
 - `dotnet build -c Release -p:CreateCipx=true` 一键打包 `.cipx`（需 PowerShell 7 的 `pwsh` 用于生成 MD5 校验）。
 
+## 测试
+
+```powershell
+dotnet run -c Release --project tests/TeacherNotifier.Tests
+```
+
+测试台是端到端的：它会真实启动插件的 `HttpListener`，用与 NapCat / SnowLuma **相同的 HMAC-SHA1 规则**签名后发上报，并由内置的假框架 API 响应备注查询。共 22 项断言，覆盖：
+
+| 分组 | 覆盖内容 |
+| --- | --- |
+| 上报鉴权 | 正确 HMAC-SHA1 被接受；旧算法 `SHA1(token+body)` **必须被拒绝**；缺签名 / 错签名 / 错 Bearer 均 401 |
+| 备注解析 | 好友备注优先、无备注回退昵称、非好友群消息回退群名片、缓存命中不重复请求 |
+| 健壮性 | `sender.card` 为 `null`、缺少 `sender` 节点时不丢消息 |
+| 自消息 | `post_type: message_sent`（SnowLuma）与 `self_id == user_id`（NapCat）均被忽略 |
+| 失败恢复 | OneBot 业务失败被识别、空结果不缓存、好友列表恢复后仍正常 |
+
+退出码非 0 表示有断言失败，可直接用于 CI。GitHub Actions 会在 push 与 PR 时自动运行（见 `.github/workflows/tests.yml`）。
+
+## 部署
+
+```powershell
+pwsh -File .\deploy-restart.ps1                 # 构建 + 部署 + 重启 ClassIsland
+pwsh -File .\deploy-restart.ps1 -SkipBuild      # 只部署已有构建产物
+pwsh -File .\deploy-restart.ps1 -NoRestart      # 只构建部署，不重启
+pwsh -File .\deploy-restart.ps1 -ClassIslandDir 'D:\ClassIsland'   # 指定 ClassIsland 目录
+```
+
+脚本会优雅关闭 ClassIsland、只复制运行时需要的文件，然后重新启动。
+
 ## 许可证
 
 MIT
