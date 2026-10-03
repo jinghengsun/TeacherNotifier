@@ -25,7 +25,10 @@ public class Plugin : PluginBase
 
         services.AddSingleton(settings);
 
-        // NapCat 连接服务（作为托管服务，随主机启动/停止）
+        // 机器人框架（NapCat / SnowLuma）的 OneBot API 客户端
+        services.AddSingleton<NapCatApiClient>();
+
+        // 消息接收服务（作为托管服务，随主机启动/停止）
         services.AddSingleton<NapCatConnectionService>();
         services.AddHostedService(sp => sp.GetRequiredService<NapCatConnectionService>());
 

@@ -20,13 +20,13 @@
                 <NumericUpDown Value="{Binding Port}" Minimum="1024" Maximum="65535" Increment="1"
                                 HorizontalAlignment="Left" Width="160" />
 
-                <TextBlock Text="访问令牌（NapCat 连接生成的 Token，留空则不校验）" Opacity="0.7" />
+                <TextBlock Text="访问令牌（用于接收上报：框架里上报/反向 WS 配置的 access token，留空则不校验）" Opacity="0.7" TextWrapping="Wrap" />
                 <TextBox Text="{Binding AccessToken}" Watermark="留空表示不校验" />
 
-                <TextBlock Text="NapCat HTTP API 地址（用于查备注，留空则不查）" Opacity="0.7" />
-                <TextBox Text="{Binding NapCatApiUrl}" Watermark="http://127.0.0.1:18801" />
+                <TextBlock Text="机器人 HTTP API 地址（用于查备注，留空则不查）" Opacity="0.7" TextWrapping="Wrap" />
+                <TextBox Text="{Binding NapCatApiUrl}" Watermark="NapCat: http://127.0.0.1:18801    SnowLuma: http://127.0.0.1:3000" />
 
-                <TextBlock Text="NapCat HTTP API Token（WebUI 里 HTTP 服务器配置的 token）" Opacity="0.7" />
+                <TextBlock Text="机器人 HTTP API Token（用于主动查询：上一步那个 HTTP 服务/OneBot HTTP 的 access token）" Opacity="0.7" TextWrapping="Wrap" />
                 <TextBox Text="{Binding NapCatApiToken}" Watermark="留空表示无 token" />
 
                 <TextBlock Text="手动备注映射（QQ号=备注名，逗号分隔，最可靠不依赖 API）" Opacity="0.7" />
@@ -79,7 +79,7 @@
             </StackPanel>
 
             <TextBlock
-                Text="改完即时生效。请在 NapCat 中把上报地址设为 http://127.0.0.1:{端口}/（HTTP 模式）或 ws://127.0.0.1:{端口}/（WebSocket 模式）。"
+                Text="改完即时生效。请在机器人框架中把上报地址设为 http://127.0.0.1:{端口}/（HTTP 模式）或 ws://127.0.0.1:{端口}/（反向 WebSocket 模式）。"
                 TextWrapping="Wrap" Opacity="0.6" FontSize="12" />
         </StackPanel>
     </ScrollViewer>
