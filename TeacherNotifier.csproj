@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- 插件包内容：manifest、README、图标随生成输出，打包 .cipx 时需要 -->
     <None Update="manifest.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -36,6 +37,20 @@
     <None Update="icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 测试项目位于本项目目录下的 tests/ 子目录。它构建后会在那里生成 obj/，
+         而默认的源文件通配（**/*.cs）会把 tests/**/obj/**.cs 也当作本项目的源码，
+         导致 AssemblyInfo 重复定义（CS0579）。这里显式排除整个 tests 目录。 -->
+    <Compile Remove="tests\**" />
+    <None Remove="tests\**" />
+    <EmbeddedResource Remove="tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 测试项目需要访问 NapCatConnectionService.InvalidateCachesForTest 以重置缓存 -->
+    <InternalsVisibleTo Include="TeacherNotifier.Tests" />
   </ItemGroup>
 
 </Project>

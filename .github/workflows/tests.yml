@@ -1,0 +1,42 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    # 插件目标是 net8.0-windows 且使用 HttpListener，因此需要 Windows 运行器
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 运行端到端测试
+        # 测试台会真实启动 HttpListener 并模拟机器人框架的 OneBot API，
+        # 覆盖：上报签名鉴权、备注解析与缓存、异常事件健壮性、自消息过滤、API 失败恢复
+        run: dotnet run -c Release --project tests/TeacherNotifier.Tests/TeacherNotifier.Tests.csproj
+
+  build:
+    # 确认插件本体（依赖 ClassIsland PluginSdk 与 Avalonia）也能正常编译
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 编译插件
+        run: dotnet build -c Release -v minimal TeacherNotifier.csproj
